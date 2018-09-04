@@ -1,0 +1,19 @@
+{
+    "name": "web-xander/framework",
+    "description": "The WebXander Framework.",
+    "keywords": ["framework", "webxander"],
+    "license": "MIT",
+    "type": "project",
+    "require": {
+        "monolog/monolog": "1.0.*",
+        "filp/whoops": "^2.2",
+        "symfony/http-foundation": "^4.1",
+        "symfony/routing": "^4.1",
+        "symfony/http-kernel": "^4.1",
+        "symfony/var-dumper": "^4.1",
+        "symfony/console": "^4.1"
+    },
+     "autoload": {
+        "psr-4": {"App\\": "app/"}
+    }
+}
