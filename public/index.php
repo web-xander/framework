@@ -14,9 +14,23 @@
 
 require __DIR__.'/../vendor/autoload.php';
 
+ini_set ( 'display_errors' , 1 );
+error_reporting ( - 1 );
+
 /*
 |--------------------------------------------------------------------------
 | Run The Application
 |-------------------------------------------------------------------
 */
-require '../app/app.php';
+
+$application = new \Webxander\Application();
+
+$response = $application->handle(
+    $request = \Webxander\Request::capture()
+);
+
+$response->send();
+
+$application->terminate( $request , $response );
+
+//$application->run();

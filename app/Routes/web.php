@@ -5,22 +5,23 @@ namespace App\Routes;
 use Symfony\Component\HttpFoundation\Response as Response;
 use App\Controllers\PagesController;
 use Symfony\Component\Routing\RouteCollection;
+use Webxander\Routing\Route;
 /**
  * Routes
  */
 
 $routes->add('home', new Route('get', '/', function (){
-    echo "Hello!";
+    echo "Hello World!";
 }));
 
 $routes->add('pages', 
     new Route('get', '/pages', [
-    PagesController::class,'index'
+    'PagesController::index'
 ]));
 
 $routes->add('blog', 
     new Route('get', '/blog', [
-    PagesController::class,'welcome'
+    'PagesController::welcome'
 ]));
 
 $routes->add('welcome', 
