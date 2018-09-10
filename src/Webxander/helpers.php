@@ -7,11 +7,7 @@
  */
 function view($view, $data = null)
 {
-		if (!file_exists(getAbsolutePath()."/views/$view.php"))
-  			throw new InvalidArgumentException("View [{$view}] not found.");
-		else {
-			return \Webxander\View::make($view, $data);
-		}	
+	return \Webxander\View::make($view, $data);			
 }
 
 function getAbsolutePath()

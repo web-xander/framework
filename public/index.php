@@ -17,6 +17,14 @@ require __DIR__.'/../vendor/autoload.php';
 ini_set ( 'display_errors' , 1 );
 error_reporting ( - 1 );
 
+// replace with file to your own project bootstrap
+require_once __DIR__ . '/../bootstrap/app.php';
+
+// replace with mechanism to retrieve EntityManager in your app
+use Webxander\Database\Connection;
+
+Connection::setEntityManager();
+
 /*
 |--------------------------------------------------------------------------
 | Run The Application
@@ -32,5 +40,3 @@ $response = $application->handle(
 $response->send();
 
 $application->terminate( $request , $response );
-
-//$application->run();

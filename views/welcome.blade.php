@@ -2,10 +2,10 @@
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
-	<title>Probando MVC</title>
+	<title>Welcome to WebXander Framework</title>
 </head>
 <body>
-	<h1>Probando Patron MVC</h1>
-	<?php print_r($data['name']) ?>
+	<h1>Welcome to WebXander Framework</h1>
+
 </body>
 </html>

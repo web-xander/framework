@@ -11,8 +11,6 @@ class StringResponseListener implements EventSubscriberInterface
     public function onView(GetResponseForControllerResultEvent $event)
     {
         $response = $event->getControllerResult();
-
-        dd($response);
         
         if ( is_string( $response )) {
             

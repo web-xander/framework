@@ -2,13 +2,15 @@
 
 namespace Webxander;
 
+use eftec\bladeone\BladeOne;
+
 class View {
 
     protected $response;
 
     public function __construct($response)
     {
-        $this->response = $response; 
+        $this->response = $response;
     }
 
     public function viewError($e)
@@ -19,16 +21,14 @@ class View {
 
     public static function make($view, $data = null)
     {
-        $request = Request::createFromGlobals();
+                
+        $views = getAbsolutePath() . '/views';
+        $cache = getAbsolutePath() . '/cache';
+        $blade=new BladeOne($views,$cache,BladeOne::MODE_AUTO);
 
-        ob_start();
-		include (getAbsolutePath()."/views/$view.php");
-        $response = (new Response())->setContent(ob_get_clean());
-
-        //$response->setSharedMaxAge( 3600 );
-
-        //$response->headers->addCacheControlDirective( 'must-revalidate' , true );
-
-        return $response;
+        if($data)
+            return new Response($blade->run($view,$data));
+        
+        return new Response($blade->run($view));
     }
 }

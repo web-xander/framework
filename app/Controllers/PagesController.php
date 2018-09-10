@@ -3,6 +3,7 @@
 namespace App\Controllers;
 
 use Webxander\Request;
+use App\Model\User;
 /**
  * PageController
  */
@@ -10,16 +11,17 @@ class PagesController extends Controller
 {
 	public function index(Request $request)
 	{
-		$name = "User";
-		$surname = "Test";
-		return view('index', compact('name','surname'));
+		$users = (new User())->all();
+
+		//dd($users);
+
+		$msg = "Bienvenido";
+		
+		return view('index', compact('users', 'msg'));
 	}
 
-	public function welcome(Request $request, $user = "Alejandro")
+	public function welcome(Request $request)
 	{
-		$name = $user;
-		$surname = "Test";
-		return "Hola mundo!";
-		return view('index', compact('name','surname'));
+		return view('welcome');
 	}	
 }

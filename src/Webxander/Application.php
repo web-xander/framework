@@ -17,8 +17,6 @@ class Application extends HttpKernel
 
 	protected $dispatcher;
 
-	protected $container;
-
 	protected $controller;
 
 	protected $arguments;
@@ -38,7 +36,9 @@ class Application extends HttpKernel
 
 		$this->request = Request::capture();
 
-		$this->container = new DependencyInjection\ContainerBuilder();
+		//$this->container = new Container();
+		Container::setup();
+		//dd($this->container);
 
 		$this->addServices(ServicesProvider::class);
 
@@ -70,10 +70,11 @@ class Application extends HttpKernel
 
 	public function run()
 	{
-		//dd($this->controller);
-		$route = new Router($this->request, $this->routes, $this->dispatcher, $this->container, $this->controller, $this->arguments);
+
+		//Route::controller('index', 'PagesController');
+
+		$route = new Router($this->request, $this->routes, $this->dispatcher, $this->controller, $this->arguments);
 		
-		//dd($this->response);
 		if($this->response == null){
 			$this->response = $route->run();
 			
@@ -81,14 +82,6 @@ class Application extends HttpKernel
 
 		return $this->response;
 		
-	}
-
-	/**
-     * Get application container
-     */
-	public function getContainer()
-	{
-		return $this->container;
 	}
 
 	/**
@@ -115,7 +108,7 @@ class Application extends HttpKernel
 		$services = new $provider;
 		$services = $services->register();
 		foreach($services as $key => $item)
-			$this->container->register( $key , $item );
+			Container::registerClass( $key , $item );
 	}
 
 	/**
@@ -123,8 +116,8 @@ class Application extends HttpKernel
      */
 	public function whoops()
 	{
-		$whoops = $this->container->get('whoops');
-		$whoops->pushHandler($this->container->get('whoopsPretty'));
+		$whoops = Container::getClass('whoops');
+		$whoops->pushHandler(Container::getClass('whoopsPretty'));
 		$whoops->register();
 	}
 
@@ -133,7 +126,7 @@ class Application extends HttpKernel
      */
 	public function setRoutes()
 	{
-		$routes = $this->container->get( 'routes' );	
+		$routes = Container::getClass( 'routes' );	
 
 		$this->routes = require(getAbsolutePath()."/app/Routes/web.php");
 	}
@@ -151,7 +144,7 @@ class Application extends HttpKernel
      */
 	public function setDispatcherEvents()
 	{
-		$this->dispatcher = (new Dispatcher())->register($this->container, $this->routes);
+		$this->dispatcher = (new Dispatcher())->register($this->routes);
 	}
 
 	/**
@@ -167,14 +160,14 @@ class Application extends HttpKernel
      */
 	public function callRouteManager()
 	{
-		$context = $this->container->get( 'context' );
+		$context = Container::getClass( 'context' );
 		$context->fromRequest( $this->request );
-		$matcher = $this->container->get( 'matcher' );
+		$matcher = Container::getClass( 'matcher' );
 
 		
-		$this->controllerResolver = $this->container->get('controllerResolver');
-		$this->argumentResolver = $this->container->get('argumentResolver');
-		$this->requestStack = $this->container->get('request_stack');
+		$this->controllerResolver = Container::getClass('controllerResolver');
+		$this->argumentResolver = Container::getClass('argumentResolver');
+		$this->requestStack = Container::getClass('request_stack');
 		
 		try{
 			$this->request->attributes->add($matcher->match( $this->request->getPathInfo()));

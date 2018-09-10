@@ -16,7 +16,9 @@ class ServicesProvider
                 'whoopsPretty' => \Whoops\Handler\PrettyPageHandler::class,
                 'request_stack' => \Symfony\Component\HttpFoundation\RequestStack::class,
                 'controllerResolver' => \Symfony\Component\HttpKernel\Controller\ControllerResolver::class,
-                'argumentResolver' => \Symfony\Component\HttpKernel\Controller\ArgumentResolver::class,                
+                'argumentResolver' => \Symfony\Component\HttpKernel\Controller\ArgumentResolver::class,
+                'debugbar' => \DebugBar\StandardDebugBar::class,
+                'debugstack' => \Doctrine\DBAL\Logging\DebugStack::class,
             ];
             
     }

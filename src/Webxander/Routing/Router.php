@@ -4,6 +4,7 @@ namespace Webxander\Routing;
 
 use Webxander\Response;
 use Webxander\Request;
+use Webxander\Container;
 use Symfony\Component\Routing\RouteCollection;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Webxander\ResponseEvent;
@@ -27,7 +28,7 @@ class Router
 
 	protected $dispatcher;
 
-	public function __construct($request, $routes, $dispatcher, $container, $controller, $arguments){
+	public function __construct($request, $routes, $dispatcher, $controller, $arguments){
 
 		$this->controller = $controller;
 
@@ -39,10 +40,10 @@ class Router
 
 		$this->request = $request;
 
-		$context = $container->get( 'context' );
+		$context = Container::getClass( 'context' );
 		$context->fromRequest( $this->request );			
 		
-		$this->matcher = $container->get( 'matcher' );
+		$this->matcher = Container::getClass( 'matcher' );
 
 	}
 
