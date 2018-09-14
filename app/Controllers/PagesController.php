@@ -24,4 +24,14 @@ class PagesController extends Controller
 	{
 		return view('welcome');
 	}	
+	
+	public function create(Request $request)
+	{
+		
+		$user = User::create($request->all());
+
+		//dd($user);
+		
+		return view('users.show', compact('user'));
+	}
 }

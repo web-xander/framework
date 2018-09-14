@@ -5,6 +5,7 @@ namespace Webxander;
 use Symfony\Component\HttpKernel\HttpKernel;
 use Webxander\Routing\Router;
 use Webxander\Routing\Route;
+use Webxander\Database\Connection;
 use Webxander\Providers\ServicesProvider;
 use Webxander\Dispatcher\Dispatcher;
 use Symfony\Component\DependencyInjection;
@@ -33,7 +34,6 @@ class Application extends HttpKernel
 
 	public function __construct()
 	{
-
 		$this->request = Request::capture();
 
 		//$this->container = new Container();
@@ -43,6 +43,8 @@ class Application extends HttpKernel
 		$this->addServices(ServicesProvider::class);
 
 		$this->whoops();
+
+		Connection::setEntityManager();
 
 		$this->setRoutes();
 

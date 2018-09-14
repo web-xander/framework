@@ -4,15 +4,20 @@ namespace App\Routes;
 
 use Symfony\Component\HttpFoundation\Response as Response;
 use App\Controllers\PagesController;
-use Symfony\Component\Routing\RouteCollection;
 use Webxander\Routing\Route;
 /**
  * Routes
  */
 
 $routes->add('home', new Route('get', '/', function (){
-    echo "Hello World!";
+    
+	return view('welcome');
 }));
+
+$routes->add('users.create', 
+    new Route('post', '/users/create', [
+    'PagesController::create'
+]));
 
 $routes->add('pages', 
     new Route('get', '/pages', [

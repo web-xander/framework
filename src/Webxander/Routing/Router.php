@@ -93,8 +93,8 @@ class Router
 	
 	public function runClosure()
 	{
-		  call_user_func($this->controller);
-		  return new Response();
+		  $response = call_user_func($this->controller);
+		  return new Response($response);
 	}
 	
 	public function runController()

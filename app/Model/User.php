@@ -3,43 +3,15 @@
 namespace App\Model;
 
 use Webxander\Database\Model;
+use Webxander\Common\Inflect;
+use Doctrine\ORM\Mapping\ClassMetadata;
 
 class User extends Model
 {
-    
-    public $firstname;	
+    public $firstname;
 
-    /**
-     * Set firstname.
-     *
-     * @param string $firstname
-     *
-     * @return User
-     */
-    public function setFirstname($firstname)
-    {
-        $this->firstname = $firstname;
+    public $password;
 
-        return $this;
-    }
+    public static $table = 'users';
 
-    /**
-     * Get firstname.
-     *
-     * @return string
-     */
-    public function getFirstname()
-    {
-        return $this->firstname;
-    }
-
-    /**
-     * Get id.
-     *
-     * @return int
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
 }

@@ -4,6 +4,7 @@ namespace Webxander\Database;
 
 use Doctrine\ORM\Tools\Setup;
 use Doctrine\ORM\EntityManager;
+use Webxander\Database\ORM\DatabaseDriver;
 
 class Connection {
 
@@ -21,19 +22,24 @@ class Connection {
             'charset' => $_ENV['DB_CHARSET']
         );  
     
-        $config = Setup::createAnnotationMetadataConfiguration(
-            array($_ENV['ENTITY_DIR']),
+        $config = Setup::createConfiguration(
+            
             $_ENV['DEBUG'],
             ini_get('sys_temp_dir'),
-            null,
-            false
+            null
+            
         );
+
+        $driver = new \Doctrine\DBAL\Driver\PDOMySql\Driver();
+        $conn = new \Doctrine\DBAL\Connection($dbParams, $driver);
+        $schema = new \Doctrine\DBAL\Schema\MySqlSchemaManager($conn);
+        $config->setMetadataDriverImpl(new DatabaseDriver($schema));
     
         $config->setAutoGenerateProxyClasses(true);
         if ($_ENV['DEBUG']){
             $config->setSQLLogger(new \Doctrine\DBAL\Logging\DebugStack());
         }
-    
+
         self::$entityManager = EntityManager::create($dbParams, $config);
     }
 

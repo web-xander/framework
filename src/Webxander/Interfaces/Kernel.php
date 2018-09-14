@@ -27,11 +27,4 @@ interface Kernel
      * @return void
      */
     public function terminate($request, $response);
-
-    /**
-     * Get the Laravel application instance.
-     *
-     * @return \Illuminate\Contracts\Foundation\Application
-     */
-    public function getApplication();
 }
