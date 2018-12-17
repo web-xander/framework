@@ -2,8 +2,6 @@
 
 namespace App\Routes;
 
-use Symfony\Component\HttpFoundation\Response as Response;
-use App\Controllers\PagesController;
 use Webxander\Routing\Route;
 /**
  * Routes

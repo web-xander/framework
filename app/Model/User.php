@@ -4,7 +4,6 @@ namespace App\Model;
 
 use Webxander\Database\Model;
 use Webxander\Common\Inflect;
-use Doctrine\ORM\Mapping\ClassMetadata;
 
 class User extends Model
 {

@@ -3,9 +3,6 @@
 namespace Webxander\Routing;
 
 use Webxander\Request;
-use Symfony\Component\Routing\Matcher\UrlMatcher;
-use Symfony\Component\Routing\RequestContext;
-use Symfony\Component\Routing\RouteCollection;
 use Symfony\Component\Routing\Route as RouteProvider;
 $request = Request::createFromGlobals();
 
@@ -18,8 +15,8 @@ class Route extends RouteProvider
 	public static $methods = ['post', 'get'];
 
 	public function __construct($method, $route, $actions = NULL)
-    {	
-	        if(in_array($method, self::$methods)){
+    {
+            if(in_array($method, self::$methods)){
 	        	
 				if(!$actions){
 					throw new \InvalidArgumentException("Action not found");
@@ -27,7 +24,7 @@ class Route extends RouteProvider
 										
 					parent::__construct($route, [
 						'_controller' => $actions,
-						
+						'_method' => $method,
 					]);					
 
 				} else{ 
@@ -35,12 +32,13 @@ class Route extends RouteProvider
 					$namespace = "\\App\\Controllers\\";
 					parent::__construct($route, [
 						'_controller' => $namespace.$actions[0],
+                        '_method' => $method,
 						
 					]);
 				}				
 
 	        }else {
-	        	throw new \InvalidArgumentException("Method not found: $name.");
+	        	throw new \InvalidArgumentException("Method not found: $method.");
 	        }
 
 	    return $this;

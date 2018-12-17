@@ -21,9 +21,14 @@ abstract class Model
     {
         return $this->id;
     }
-	
-	public static function __callstatic($name, $arguments)
-	{	
+
+    /**
+     * @param $name
+     * @param $arguments
+     * @return mixed
+     */
+    public static function __callstatic($name, $arguments)
+	{
 		return self::newQueryStatic()->$name(get_called_class(), $arguments);
 	}
 	
@@ -31,11 +36,6 @@ abstract class Model
 	{
 		return new Builder;
 	}
-
-    public function all()
-    {
-        return $this->newQuery()->all(get_called_class());
-    }
 
     public function __set($name, $value)
     {

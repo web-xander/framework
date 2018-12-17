@@ -1,9 +1,16 @@
 <?php
 
+function app()
+{
+    return \Webxander\Container::getInstance();
+}
+
 /**
  * View Function
  * @param $view; Name of View
  * @param $data; Data passing to View
+ *
+ * @return \Webxander\Response
  */
 function view($view, $data = null)
 {
@@ -12,22 +19,24 @@ function view($view, $data = null)
 
 
 /**
- * Get Absolute Path of Root Proyect
- * 
+ * Get Absolute Path of Root Project
+ * @param $url
+ * @return string
  */
-function getAbsolutePath()
+function getAbsolutePath($url)
 {
 	$root = realpath($_SERVER["DOCUMENT_ROOT"]);
 
 	$root = str_replace("public", "", $root);
 
-	return $root;
+	return $root . $url;
 }
 
 
 /**
- * Encrypt password use CRYPT_BLOWFISH algorytm
+ * Encrypt password use CRYPT_BLOWFISH algorithm
  * @param $psw; Password to encrypt
+ * @return bool|string
  */
 function bcrypt($psw)
 {

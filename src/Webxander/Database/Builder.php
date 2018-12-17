@@ -23,8 +23,13 @@ class Builder
         $this->queryBuilder = Connection::getEntityManager()->createQueryBuilder();
 		
     }
-	
-	public function create($model, $data)
+
+    /**
+     * @param $model
+     * @param $data
+     * @return mixed
+     */
+    public function create($model, $data)
 	{
         $newModel = new $model();
 

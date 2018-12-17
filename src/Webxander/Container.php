@@ -9,9 +9,24 @@ class Container extends ContainerBuilder
 {
     protected static $container;
 
+    protected static $appInstance;
+
     public static function setup()
     {
         self::$container = new Container;
+    }
+
+    /**
+     * @param null $instance
+     */
+    public static function getInstance()
+    {
+        return self::$appInstance;
+    }
+
+    public static function registerInstance($instance)
+    {
+        self::$appInstance = $instance;
     }
 
     public static function registerClass($key, $item)

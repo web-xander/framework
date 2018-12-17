@@ -4,12 +4,17 @@ namespace Webxander\Exception;
 
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Debug\Exception\FlattenException;
+use Webxander\View;
 
 class ErrorController
 {
-    public function exception( FlattenException $exception )
+    /**
+     * @param FlattenException $exception
+     * @return \Webxander\Response
+     */
+    public function routeErrorException(FlattenException $exception )
     {
-        $msg = 'Something went wrong! (' . $exception->getMessage() . ')' ;
-        return new Response( $msg , $exception->getStatusCode());
+        return View::error( $exception->getStatusCode(), new Response($exception->getMessage(), $exception->getStatusCode()));
     }
+
 }

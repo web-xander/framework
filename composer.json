@@ -31,6 +31,7 @@
         "files": ["src/Webxander/helpers.php"]
     },
     "require-dev": {
-        "phpunit/phpunit": "^7.3"
+        "phpunit/phpunit": "^7.3",
+        "codeception/codeception": "^2.4"
     }
 }

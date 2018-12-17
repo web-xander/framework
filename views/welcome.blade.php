@@ -1,11 +1,10 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-	<meta charset="UTF-8">
-	<title>Welcome to WebXander Framework</title>
-</head>
-<body>
-	<h1>Welcome to WebXander Framework</h1>
+@extends('layout.app')
 
-</body>
-</html>
+@section('content')
+
+	<h1>Welcome to WebXander Framework</h1>
+    <h2>Documentación</h2>
+    <h2>GitHub</h2>
+    <h2>Contact us</h2>
+
+@endsection

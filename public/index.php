@@ -26,11 +26,9 @@ require_once __DIR__ . '/../bootstrap/app.php';
 |-------------------------------------------------------------------
 */
 
-$application = new \Webxander\Application();
+$application = new \Webxander\Application($request = \Webxander\Request::capture());
 
-$response = $application->handle(
-    $request = \Webxander\Request::capture()
-);
+$response = $application->handle();
 
 $response->send();
 

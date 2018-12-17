@@ -17,7 +17,7 @@ class Dispatcher
         );
 
         Container::getDefinitionClass( 'matcher' )
-		->setArguments( array( $routes , new Reference ( 'context' )));
+		    ->setArguments( array( $routes , new Reference ( 'context' )));
         
         Container::getDefinitionClass( 'listener.router' )
 			->setArguments( array ( new Reference ( 'matcher' ), new Reference ( 'request_stack' )));
@@ -25,14 +25,14 @@ class Dispatcher
         Container::registerClass('dispatcher', EventDispatcher::class)
             ->addMethodCall( 'addSubscriber' , array ( 
                 $listener) )
-                -> addMethodCall ( 'addSubscriber' , array ( 
-                    new Reference ( 'listener.router' ) ) )
-                -> addMethodCall ( 'addSubscriber' , array (
+            ->addMethodCall ( 'addSubscriber' , array (
+                new Reference ( 'listener.router' ) ) )
+            ->addMethodCall ( 'addSubscriber' , array (
                 new \Symfony\Component\HttpKernel\EventListener\ResponseListener( 'UTF-8' ) ))
-                -> addMethodCall ( 'addSubscriber' , array (
+            ->addMethodCall ( 'addSubscriber' , array (
                 new \App\Listeners\StringResponseListener() ) )
-                -> addMethodCall ( 'addSubscriber' , array (
-                    new \App\Listeners\DebugBarListener() ) );
+            ->addMethodCall ( 'addSubscriber' , array (
+                 new \App\Listeners\DebugBarListener() ) );
         
         return Container::getClass('dispatcher');
     }

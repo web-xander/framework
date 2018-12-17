@@ -3,14 +3,8 @@
 namespace Webxander\Routing;
 
 use Webxander\Response;
-use Webxander\Request;
 use Webxander\Container;
-use Symfony\Component\Routing\RouteCollection;
-use Symfony\Component\EventDispatcher\EventDispatcher;
 use Webxander\ResponseEvent;
-use Symfony\Component\Routing\Exception\ResourceNotFoundException;
-use Symfony\Component\Routing\Route;
-use Symfony\Component\HttpKernel;
 
 class Router
 {
@@ -28,7 +22,19 @@ class Router
 
 	protected $dispatcher;
 
-	public function __construct($request, $routes, $dispatcher, $controller, $arguments){
+    protected $arguments;
+
+    protected $request;
+
+    /**
+     * Router constructor.
+     * @param $request
+     * @param $routes
+     * @param $dispatcher
+     * @param $controller
+     * @param $arguments
+     */
+    public function __construct($request, $routes, $dispatcher, $controller, $arguments){
 
 		$this->controller = $controller;
 
@@ -47,12 +53,12 @@ class Router
 
 	}
 
-	public function run(){
-
+    /**
+     * @return mixed|Response
+     */
+    public function run(){
 		
-			//$attributes = $this->matcher->match($this->request->getRequestUri());
-		
-			$response = $this->handle();
+	    $response = $this->handle();
 
 		// dispatch a response event
         $this->dispatcher->dispatch( 'response' , new ResponseEvent( $response , $this->request ));
@@ -61,50 +67,49 @@ class Router
 
 	}
 
-	/*
-	*
-	* Llama a un metodo de clase si existe.
-	*/
-	public function handle()
-	{
 
-		//dd($this->controller[0]);
+    /**
+     * Llama a un metodo de clase si existe.
+     * @return mixed|Response
+     */
+    public function handle()
+	{
 		if(is_object($this->controller)){
-			return $this->runClosure();			
+			return $this->runClosure();
 		}else{			
 			
 			return $this->runController();
 		} 
 	}
 
-	/*
-	*
-	* Llama a una accion desde una ruta utilizando el metodo GET
-	*/
-	public function get()
-	{
-		
-	}
-
-	public function getRoutes()
+    /**
+     * @return mixed
+     */
+    public function getRoutes()
     {
         return $this->routes;
 	}
-	
-	public function runClosure()
+
+    /**
+     * @return mixed|Response
+     */
+    public function runClosure()
 	{
 		  $response = call_user_func($this->controller);
+		  if($response instanceof Response)
+		      return $response;
 		  return new Response($response);
 	}
-	
-	public function runController()
+
+    /**
+     * @return mixed|Response
+     */
+    public function runController()
 	{
-		
 			$response = call_user_func_array( $this->controller, $this->arguments);
-			if(is_string($response))
-				return new Response($response);
-			return $response;
-		
+            if($response instanceof Response)
+				return $response;
+			return new Response($response);
 	}	
 
 }

@@ -13,17 +13,20 @@ class View {
         $this->response = $response;
     }
 
-    public function viewError($e)
+    public static function error($e, $response)
     {
-        $this->response->sendHeaders();
-        include(getAbsolutePath()."/views/errors/$e.php");
+        $views = getAbsolutePath('/views');
+        $cache = getAbsolutePath('/cache');
+        $blade=new BladeOne($views,$cache,BladeOne::MODE_AUTO);
+
+        return $response->setContent($blade->run("errors.$e"));
     }
 
     public static function make($view, $data = null)
     {
                 
-        $views = getAbsolutePath() . '/views';
-        $cache = getAbsolutePath() . '/cache';
+        $views = getAbsolutePath('/views');
+        $cache = getAbsolutePath('/cache');
         $blade=new BladeOne($views,$cache,BladeOne::MODE_AUTO);
 
         if($data)

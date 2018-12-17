@@ -11,13 +11,9 @@ class PagesController extends Controller
 {
 	public function index(Request $request)
 	{
-		$users = (new User())->all();
-
-		//dd($users);
-
-		$msg = "Bienvenido";
+		$users = User::all();
 		
-		return view('index', compact('users', 'msg'));
+		return view('index', compact('users'));
 	}
 
 	public function welcome(Request $request)

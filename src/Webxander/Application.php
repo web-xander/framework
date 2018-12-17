@@ -3,16 +3,17 @@
 namespace Webxander;
 
 use Symfony\Component\HttpKernel\HttpKernel;
+use Webxander\Common\Traits\Singleton;
 use Webxander\Routing\Router;
-use Webxander\Routing\Route;
 use Webxander\Database\Connection;
 use Webxander\Providers\ServicesProvider;
 use Webxander\Dispatcher\Dispatcher;
-use Symfony\Component\DependencyInjection;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 
-class Application extends HttpKernel 
+class Application extends HttpKernel
 {
+
+    use Singleton;
 
 	protected $routes;
 
@@ -32,13 +33,23 @@ class Application extends HttpKernel
 
 	protected $argumentResolver;
 
-	public function __construct()
+	public function __construct($request)
 	{
-		$this->request = Request::capture();
+        $this->request = $request;
 
-		//$this->container = new Container();
+        $dotenv = new \Dotenv\Dotenv(__DIR__.'//../../');
+        $dotenv->load();
+        $dotenv->required([
+            'DB_HOST',
+            'DB_DATABASE',
+            'DB_USERNAME',
+            'DB_PASSWORD',
+            'DB_DRIVER'
+        ]);
+
 		Container::setup();
-		//dd($this->container);
+
+		Container::registerInstance($this);
 
 		$this->addServices(ServicesProvider::class);
 
@@ -57,12 +68,20 @@ class Application extends HttpKernel
 	}
 
 	public function handle(
-		\Symfony\Component\HttpFoundation\Request $request,
+		\Symfony\Component\HttpFoundation\Request $request = NULL,
 		$type = self::MASTER_REQUEST,
         $catch = true
 		)
 	{
-		return $this->run();
+
+        if(!$this->response){
+            if (($this->request->getMethod()) == strtoupper($this->request->attributes->get('_method')))
+                return $this->run();
+            else
+                throw new \InvalidArgumentException("Method not allowed");
+        }
+
+        return $this->response;
 	}
 
 	public function terminate(\Symfony\Component\HttpFoundation\Request $request , \Symfony\Component\HttpFoundation\Response $response)
@@ -72,16 +91,11 @@ class Application extends HttpKernel
 
 	public function run()
 	{
-
-		//Route::controller('index', 'PagesController');
-
-		$route = new Router($this->request, $this->routes, $this->dispatcher, $this->controller, $this->arguments);
+        $route = new Router($this->request, $this->routes, $this->dispatcher, $this->controller, $this->arguments);
 		
 		if($this->response == null){
 			$this->response = $route->run();
-			
 		}
-
 		return $this->response;
 		
 	}
@@ -102,8 +116,9 @@ class Application extends HttpKernel
 		return $this->arguments;
 	}
 
-	/**
+    /**
      * Register services to container
+     * @param $provider
      */
 	public function addServices($provider)
 	{
@@ -130,7 +145,7 @@ class Application extends HttpKernel
 	{
 		$routes = Container::getClass( 'routes' );	
 
-		$this->routes = require(getAbsolutePath()."/app/Routes/web.php");
+		$this->routes = require(getAbsolutePath("/app/Routes/web.php"));
 	}
 
 	/**
@@ -179,14 +194,14 @@ class Application extends HttpKernel
 			$this->arguments = $this->argumentResolver->getArguments( $this->request , $this->controller );
 			
 		} catch ( ResourceNotFoundException $exception ) {
-						
-			//$exception = new \RuntimeException($exception->getMessage(), 404, $exception);
 			$exception = \Symfony\Component\Debug\Exception\FlattenException::create($exception, 404);
-			$this->response = (new \Webxander\Exception\ErrorController())->exception($exception);
+			$this->response = (new \Webxander\Exception\ErrorController())->routeErrorException($exception);
+
 		
 		} catch ( \Exception $exception ) {
 			
 			$this->response = new Response ( 'An error occurred' , 500 );
+
 			
 		}
 	}
